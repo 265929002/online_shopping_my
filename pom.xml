@@ -12,6 +12,7 @@
         <module>model</module>
         <module>service</module>
         <module>RabbitMq</module>
+        <module>service-gateway</module>
     </modules>
     <packaging>pom</packaging>
 

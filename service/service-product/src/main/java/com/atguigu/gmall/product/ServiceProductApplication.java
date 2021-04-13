@@ -7,9 +7,11 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan({"com.atguigu.gmall"})
-@EnableDiscoveryClient//注册到注册中心
+@EnableDiscoveryClient//注册到注册中心     开启服务注册和发现
 public class ServiceProductApplication {
     public static void main(String[] args) {
+
         SpringApplication.run(ServiceProductApplication.class,args);
+
     }
 }
