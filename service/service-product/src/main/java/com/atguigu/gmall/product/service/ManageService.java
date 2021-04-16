@@ -133,5 +133,10 @@ public interface ManageService {
      */
     List<SpuSaleAttr> getSpuSaleAttrListCheckBySku(Long skuId, Long spuId);
 
+    /**
+     * 根据spuid获取销售属性值id与skuid的组合数据
+     * @param spuId
+     * @return
+     */
     Map getSkuValueIdsMap(Long spuId);
 }

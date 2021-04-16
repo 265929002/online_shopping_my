@@ -9,9 +9,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -331,8 +333,17 @@ public class ManageServiceImpl implements ManageService {
      */
     @Override
     public Map getSkuValueIdsMap(Long spuId) {
+        Map map = new HashMap();
 
-        return null;
+        List<Map> mapList = skuSaleAttrValueMapper.selectSaleAttrValuesBySpu(spuId);
+        if (!StringUtils.isEmpty(mapList)){
+            for (Map maps : mapList) {
+                map.put(maps.get("value_ids"),maps.get("sku_id"));
+            }
+
+        }
+
+        return map;
     }
 
 

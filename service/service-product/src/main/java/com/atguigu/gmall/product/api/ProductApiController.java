@@ -22,7 +22,7 @@ public class ProductApiController {
     private ManageService manageService;
 
     @GetMapping("inner/getSkuInfo/{skuId}")
-    public SkuInfo getAttrValueList(@PathVariable("skuId") Long skuId){
+    public SkuInfo getSkuInfo(@PathVariable("skuId") Long skuId){
         SkuInfo skuInfo = manageService.getSkuInfo(skuId);
         return skuInfo;
     }
@@ -65,4 +65,7 @@ public class ProductApiController {
     public Map getSkuValueIdsMap(@PathVariable("spuId") Long spuId){
         return manageService.getSkuValueIdsMap(spuId);
     }
+
+
+
 }
