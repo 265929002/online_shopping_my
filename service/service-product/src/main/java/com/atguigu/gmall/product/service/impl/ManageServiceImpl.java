@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional(rollbackFor = Exception.class)//捕获异常会回滚
@@ -45,7 +47,8 @@ public class ManageServiceImpl implements ManageService {
     private SkuAttrValueMapper skuAttrValueMapper;
     @Resource
     private SkuSaleAttrValueMapper skuSaleAttrValueMapper;
-
+    @Resource
+    private BaseCategoryViewMapper baseCategoryViewMapper;
 
     @Override
     public List<BaseCategory1> getBaseCategory1() {
@@ -209,7 +212,11 @@ public class ManageServiceImpl implements ManageService {
 //      sku_attr_value
 //        sku_sale_attr_value
 //        sku_image
+
+
+        //      sku_info
         skuInfoMapper.insert(skuInfo);
+//      sku_attr_value
         List<SkuAttrValue> skuAttrValueList = skuInfo.getSkuAttrValueList();
         if (!CollectionUtils.isEmpty(skuAttrValueList)){
             for (SkuAttrValue skuAttrValue : skuAttrValueList) {
@@ -265,5 +272,68 @@ public class ManageServiceImpl implements ManageService {
         skuInfo.setIsSale(0);
         skuInfoMapper.updateById(skuInfo);
     }
+
+    /**
+     * 根据skuId查询skuInfo和skuImage
+     * @param skuId
+     * @return
+     */
+    @Override
+    public SkuInfo getSkuInfo(Long skuId) {
+//        查询skuInfo信息
+        SkuInfo skuInfo = skuInfoMapper.selectById(skuId);
+//        创建查询条件
+        QueryWrapper<SkuImage> skuImageQueryWrapper = new QueryWrapper<>();
+        skuImageQueryWrapper.eq("sku_id",skuId);
+//        查询spuImage信息
+        List<SkuImage> skuImages = skuImageMapper.selectList(skuImageQueryWrapper);
+        skuInfo.setSkuImageList(skuImages);
+        return skuInfo;
+    }
+
+    @Override
+    public BaseCategoryView getCategoryViewByCategory3Id(Long category3Id) {
+
+        return baseCategoryViewMapper.selectById(category3Id);
+    }
+
+    /**
+     * 根据skuId查询商品价格
+     * @param skuId
+     * @return
+     */
+    @Override
+    public BigDecimal getSkuPrice(Long skuId) {
+        SkuInfo skuInfo = skuInfoMapper.selectById(skuId);
+        if (skuInfo!=null){
+//            不为空则返回商品价格
+            return skuInfo.getPrice();
+        }
+        //为空就返回默认值0
+        return new BigDecimal(0);
+    }
+
+    /**
+     * 根据spuId，skuId 查询销售属性集合
+     * @param skuId
+     * @param spuId
+     * @return
+     */
+    @Override
+    public List<SpuSaleAttr> getSpuSaleAttrListCheckBySku(Long skuId, Long spuId) {
+        return spuSaleAttrMapper.selectSpuSaleAttrListCheckBySku(skuId, spuId);
+    }
+
+    /**
+     *
+     * @param spuId
+     * @return
+     */
+    @Override
+    public Map getSkuValueIdsMap(Long spuId) {
+
+        return null;
+    }
+
 
 }
